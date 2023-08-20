@@ -1,7 +1,7 @@
 // wait for the DOM to finish loading before running the Game
 // Get the button elements and add event listeners to them
 
-document.addEventListener('DOMContentLoaded', function(){
+document.addEventListener('DOMContentLoaded', function () {
     let buttons = document.getElementsByTagName('button');
 
     for (let button of buttons) {
@@ -12,21 +12,21 @@ document.addEventListener('DOMContentLoaded', function(){
                 let gameType = this.getAttribute('data-type');
                 runGame(gameType);
             }
-        })
+        });
     }
     runGame('addition');
-})
+});
 /** The main game 'loop', called when the script is first loaded and 
  * after the user's answer has been processed */
 function runGame(gameType) {
-    let num1 = Math.floor(Math.random()*25)+1;
+    let num1 = Math.floor(Math.random() * 25) + 1;
     let num2 = Math.floor(Math.random() * 25) + 1;
 
-    if (gameType === 'addition'){
+    if (gameType === 'addition') {
         displayAdditionQuestion(num1, num2);
     } else {
         alert(`Unknown game type: ${gameType}`);
-        throw `Unknown game type: ${gameType}. Aborting.`
+        throw `Unknown game type: ${gameType}. Aborting.`;
     }
 }
 
@@ -39,11 +39,13 @@ function checkAnswer() {
     let calculatedAnswer = calculateCorrectAnswer();
     let isCorrect = userAnswer === calculatedAnswer[0];
 
-    if (isCorrect){
+    if (isCorrect) {
         alert('Hey! You got it right! :)');
+        incrementScore();
     } else {
         alert(`Awwwww.... you answered ${userAnswer}. The correct answer was
         ${calculatedAnswer[0]}!`);
+        incrementWrongAnswer();
     }
     runGame(calculatedAnswer[1]);
 }
@@ -56,7 +58,7 @@ function calculateCorrectAnswer() {
     let operand2 = parseInt(document.getElementById('operand2').innerText);
     let operator = document.getElementById('operator').innerText;
 
-    if (operator === '+'){
+    if (operator === '+') {
         return [operand1 + operand2, 'addition'];
     } else {
         alert(`Unimplimented operator ${operator}`);
@@ -64,12 +66,20 @@ function calculateCorrectAnswer() {
     }
 }
 
+/**
+ * Gets the current score from the DOM and increments it by 1
+ */
 function incrementScore() {
-
+    let oldScore = parseInt(document.getElementById('score').innerText);
+    document.getElementById('score').innerText = ++oldScore;
 }
 
+/**
+ * Gets the current number of incorrect answers from the DOM and increments it by 1
+ */
 function incrementWrongAnswer() {
-
+    let oldScore = parseInt(document.getElementById('incorrect').innerText);
+    document.getElementById('incorrect').innerText = ++oldScore;
 }
 
 function displayAdditionQuestion(operand1, operand2) {
